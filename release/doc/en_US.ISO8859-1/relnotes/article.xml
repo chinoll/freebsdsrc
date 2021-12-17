@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE article PUBLIC "-//FreeBSD//DTD DocBook XML V5.0-Based Extension//EN"
+	"../../../share/xml/freebsd50.dtd" [
+<!ENTITY % release PUBLIC "-//FreeBSD//ENTITIES Release Specification//EN" "release.ent">
+ %release;
+<!ENTITY % sponsor PUBLIC "-//FreeBSD//ENTITIES Sponsor Specification//EN" "sponsor.ent">
+ %sponsor;
+<!ENTITY % vendor PUBLIC "-//FreeBSD//ENTITIES Vendor Specification//EN" "vendor.ent">
+ %vendor;
+<!ENTITY security SYSTEM "../../share/xml/security.xml">
+<!ENTITY errata SYSTEM "../../share/xml/errata.xml">
+]>
+<article xmlns="http://docbook.org/ns/docbook"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xml:id="top"
+  version="5.0">
+
+  <info>
+    <title>&os; &release.current; Release Notes</title>
+
+    <author>
+      <orgname>The &os; Project</orgname>
+    </author>
+
+    <pubdate>$FreeBSD$</pubdate>
+
+    <!-- Last rev: 288943 -->
+
+    <copyright>
+      <year>2019</year>
+      <holder role="mailto:doc@FreeBSD.org">The &os; Documentation
+	Project</holder>
+    </copyright>
+
+    <legalnotice xml:id="trademarks" role="trademarks">
+      &tm-attrib.freebsd;
+      &tm-attrib.ibm;
+      &tm-attrib.ieee;
+      &tm-attrib.intel;
+      &tm-attrib.sparc;
+      &tm-attrib.general;
+    </legalnotice>
+
+    <abstract>
+      <para>The release notes for &os; &release.current; contain
+	a summary of the changes made to the &os; base system on the
+	&release.branch; development line.  This document lists
+	applicable security advisories that were issued since the last
+	release, as well as significant changes to the &os; kernel and
+	userland.  Some brief remarks on upgrading are also
+	presented.</para>
+    </abstract>
+  </info>
+
+  <sect1 xml:id="intro">
+    <title>Introduction</title>
+
+    <para>This document contains the release notes for &os;
+      &release.current;.  It describes recently added, changed, or
+      deleted features of &os;.  It also provides some notes on
+      upgrading from previous versions of &os;.</para>
+
+    <para releasetype="current">The &release.type; distribution to
+      which these release notes apply represents the latest point
+      along the &release.branch; development branch since
+      &release.branch; was created.  Information regarding pre-built,
+      binary &release.type; distributions along this branch can be
+      found at <uri
+	xlink:href="&release.url;">&release.url;</uri>.</para>
+
+    <para releasetype="snapshot">The &release.type; distribution to
+      which these release notes apply represents a point along the
+      &release.branch; development branch between &release.prev; and
+      the future &release.next;.  Information regarding pre-built,
+      binary &release.type; distributions along this branch can be
+      found at <uri
+	xlink:href="&release.url;">&release.url;</uri>.</para>
+
+    <para releasetype="release">This distribution of &os;
+      &release.current; is a &release.type; distribution.  It can be
+      found at <uri xlink:href="&release.url;">&release.url;</uri> or
+      any of its mirrors.  More information on obtaining this (or
+      other) &release.type; distributions of &os; can be found in the
+      <link
+	xlink:href="&url.books.handbook;/mirrors.html"><quote>Obtaining
+	  &os;</quote> appendix</link> to the <link
+	xlink:href="&url.books.handbook;/">&os;
+	Handbook</link>.</para>
+
+    <para>All users are encouraged to consult the release errata
+      before installing &os;.  The errata document is updated with
+      <quote>late-breaking</quote> information discovered late in the
+      release cycle or after the release.  Typically, it contains
+      information on known bugs, security advisories, and corrections
+      to documentation.  An up-to-date copy of the errata for &os;
+      &release.current; can be found on the &os; Web site.</para>
+
+    <para>This document describes the most user-visible new or changed
+      features in &os; since &release.prev;.  In general, changes
+      described here are unique to the &release.branch; branch unless
+      specifically marked as &merged; features.</para>
+
+    <para>Typical release note items document recent security
+      advisories issued after &release.prev;, new drivers or hardware
+      support, new commands or options, major bug fixes, or
+      contributed software upgrades.  They may also list changes to
+      major ports/packages or release engineering practices.  Clearly
+      the release notes cannot list every single change made to &os;
+      between releases; this document focuses primarily on security
+      advisories, user-visible changes, and major architectural
+      improvements.</para>
+  </sect1>
+
+  <sect1 xml:id="upgrade">
+    <title>Upgrading from Previous Releases of &os;</title>
+
+    <para arch="amd64,i386">Binary upgrades between RELEASE versions
+      (and snapshots of the various security branches) are supported
+      using the &man.freebsd-update.8; utility.  The binary upgrade
+      procedure will update unmodified userland utilities, as well as
+      unmodified GENERIC kernels distributed as a part of an official
+      &os; release.  The &man.freebsd-update.8; utility requires that
+      the host being upgraded have Internet connectivity.</para>
+
+    <para>Source-based upgrades (those based on recompiling the &os;
+      base system from source code) from previous versions are
+      supported, according to the instructions in
+      <filename>/usr/src/UPDATING</filename>.</para>
+
+    <important>
+      <para>Upgrading &os; should only be attempted after backing up
+	<emphasis>all</emphasis> data and configuration files.</para>
+    </important>
+  </sect1>
+
+  <sect1 xml:id="security-errata">
+    <title>Security and Errata</title>
+
+    <para>This section lists the various Security Advisories and
+      Errata Notices since &release.prev;.</para>
+
+    <sect2 xml:id="security">
+      <title>Security Advisories</title>
+
+      &security;
+    </sect2>
+
+    <sect2 xml:id="errata">
+      <title>Errata Notices</title>
+
+      &errata;
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="userland">
+    <title>Userland</title>
+
+    <para>This section covers changes and additions to userland
+      applications, contributed software, and system utilities.</para>
+
+    <sect2 xml:id="userland-config">
+      <title>Userland Configuration Changes</title>
+
+      <para revision="339446">The &man.jail.8; utility has been
+	updated to include a new &man.jail.conf.5; parameter,
+	<literal>allow.read_msgbuf</literal>, which prevents jailed
+	processes and users from accessing the &man.dmesg.8; buffer.
+	This parameter is set to <literal>false</literal> by
+	default.</para>
+
+      <para revision="342103">The system &man.crontab.5;,
+	<filename>/etc/crontab</filename>, has been updated to set
+	<varname>PATH</varname> for consistency with the &man.cron.8;
+	daemon.</para>
+
+      <para revision="343469">The default &man.devd.conf.5; has been
+	updated to prevent duplicated &man.hostapd.8; and
+	&man.wpa.supplicant.8; startup via &man.devd.8;.</para>
+
+      <para revision="346479">A new variable,
+	<literal>init_exec</literal>, has been added to &man.kenv.1;,
+	allowing &man.init.8; to run an executable file after opening
+	the console, replacing &man.init.8; as <acronym>PID</acronym>
+	1.</para>
+    </sect2>
+
+    <sect2 xml:id="userland-programs">
+      <title>Userland Application Changes</title>
+
+      <para revision="336040">The &man.cpuset.1;, &man.sockstat.1;,
+	&man.ipfw.8;, and &man.ugidfw.8; utilities have been updated
+	to support &man.jail.8; names.</para>
+
+      <para revision="336328">The &man.newfs.msdos.8; utililty has
+	been updated to include a new flag, <literal>-T</literal>,
+	which is used to specify the timestamp for build
+	reproducibility.</para>
+
+      <para revision="338364">The &man.dd.1; utility has been updated
+	to add a new <literal>status</literal>operand,
+	<literal>progress</literal>, which reports the current status
+	on a single line every second.</para>
+
+      <para revision="338451">The &man.last.1; utility has been
+	updated to include &man.libxo.3; support.</para>
+
+      <para revision="338452">The &man.lastlogin.8; utility has been
+	updated to include &man.libxo.3; support.</para>
+
+      <para revision="338475">The &man.traceroute.8; utility has been
+	updated to include &man.libcasper.3; support.</para>
+
+      <para revision="339160">The &man.diff.1; utility has been
+	updated to implement <literal>-B</literal> and
+	<literal>--ignore-blank-lines</literal> support.</para>
+
+      <para revision="340963">The &man.makewhatis.1; utility has been
+	updated to prevent operating within read-only
+	directories.</para>
+
+      <para revision="341790">The &man.jail.8; utility has been
+	updated to add a new flag, <literal>-e</literal>, which takes
+	a &man.jail.conf.5; parameter as an argument and prints a list
+	of non-wildcard jails with the specified parameter.</para>
+
+      <para revision="342706">The &man.ktrdump.8; utility has been
+	updated to include the <literal>-l</literal> flag which
+	enables &quot;live&quot; mode when specified.</para>
+
+      <para revision="343118">The &man.trim.8; utility has been added,
+	which deletes content for blocks on flash-based storage
+	devices that use wear-leveling algorithms.</para>
+
+      <para revision="343251">The &man.gzip.1; utility has been
+	updated to add <literal>-l</literal> support for &man.xz.1;
+	files.</para>
+
+      <para revision="343538" contrib="sponsor"
+	sponsor="&netflix;">The &man.newfs.8; and &man.tunefs.8;
+	utilities have been updated to allow underscores in label
+	names.</para>
+
+      <para revision="344020">The &man.pfctl.8; utility has been
+	updated to provide clearer output and reference the
+	<literal>net.pf.request_maxcount</literal> &man.sysctl.8;
+	if a defined table is too large.</para>
+
+      <para revision="344052">The &man.newfs.8; and &man.tunefs.8;
+	utilities have been updated to allow dashes in label
+	names.</para>
+
+      <para revision="344490">The &man.fdisk.8; utility has been
+	updated to support sectors larger than 2048 bytes.</para>
+
+      <para revision="345561">The &man.sh.1; utility has been updated
+	to add the <literal>pipefail</literal> option which simplifies
+	checking the exit status of all commands in a pipeline.</para>
+
+      <para revision="345878">The &man.patch.1; utility has been
+	updated to exit successfully if the input patch file is
+	zero-length.</para>
+
+      <para revision="346518">The &man.spi.8; utility has been added,
+	which is used to communicate with devices on an
+	<acronym>SPI</acronym> bus through the userland.</para>
+    </sect2>
+
+    <sect2 xml:id="userland-contrib">
+      <title>Contributed Software</title>
+
+      <para revision="334607">The &man.xz.1; utility has been updated
+	to version 5.2.4.</para>
+
+      <para revision="337827">The &man.file.1; utility has been
+	updated to version 5.34.</para>
+
+      <para revision="338414" contrib="sponsor" sponsor="&ff;">The
+	<application>ELF Tool Chain</application> has been updated to
+	version r3614.</para>
+
+      <para revision="339100" contrib="sponsor" sponsor="&ff;">The
+	<application>lld</application> utility has been updated to add
+	<literal>-z interpose</literal>, marking the object file as
+	an interposer.</para>
+
+      <para revision="343079">The &man.file.1; utility has been
+	updated to fix incorrect date reporting for &man.dump.8;
+	files.</para>
+
+      <para revision="344220">The <application>LUA</application>
+	&man.loader.8; has been merged.</para>
+
+      <para revision="344884">The &man.ntpd.8; utilities have been
+	updated to version 4.2.8p13.</para>
+
+      <para revision="346296">The <application>clang</application>,
+	<application>llvm</application>,
+	<application>lld</application>,
+	<application>lldb</application>, and
+	<application>compiler-rt</application> utilities as well as
+	<application>libc++</application> have been updated to
+	upstream version 8.0.0.</para>
+
+      <para revision="346981">The <application>WPA</application>
+	utilities have been updated to version 2.8.</para>
+
+      <para revision="348343"><application>OpenSSL</application> has
+	been updated to version 1.0.2s.</para>
+
+      <para revision="348607">The &man.libarchive.3; library has been
+	updated to version 3.3.3, with additional fixes from
+	upstream.</para>
+
+      <para revision="348980"><application>OpenPAM</application> has
+	been updated to the latest upstream version.</para>
+    </sect2>
+
+    <sect2 xml:id="userland-rc">
+      <title><filename class="directory">/etc/rc.d</filename>
+	Scripts</title>
+
+      <para revision="340611">Support for auxiliary
+	<acronym>RAM</acronym> has been added to
+	<filename>/etc/rc.initdiskless</filename>.</para>
+
+      <para revision="340966">The &man.rcorder.8; utility has been
+	updated to add support for
+	<filename>/etc/rc.resume</filename>.</para>
+
+      <para revision="341792">The <literal>jail_conf</literal>
+	definition, which defaults to
+	<filename>/etc/jail.conf</filename>, has been moved from
+	the &man.jail.8; &man.rc.8; script to
+	<filename>/etc/defaults/rc.conf</filename>.</para>
+
+      <para revision="343046">The <varname>rc_service</varname>
+	variable has been added to &man.rc.subr.8;, which defaults to
+	the path of the service being executed in case the service
+	needs to re-invoke itself.</para>
+
+      <para revision="349620">Timezone data files have been updated to
+	version 2019b.</para>
+    </sect2>
+
+    <sect2 xml:id="userland-periodic">
+      <title><filename class="directory">/etc/periodic</filename>
+	Scripts</title>
+
+      <para revision="341794">The &man.periodic.8; weekly
+	<filename>340.noid</filename> script has been updated to
+	prevent decending into the root directory of jails.</para>
+    </sect2>
+
+    <sect2 xml:id="userland-libraries">
+      <title>Runtime Libraries and API</title>
+
+      <para revision="335640">The &man.pcap.3; library has been
+	updated to version 1.9.0 (pre-release).</para>
+
+      <para revision="336449">The &man.setproctitle.fast.3; function
+	has been added, which is optimized for high-frequency process
+	title updates.</para>
+
+      <para revision="337418" contrib="sponsor"
+	sponsor="&dellemc;">The &man.kqueue.2; system call has been
+	updated to allow updating
+	<literal>EVFILT_TIMER</literal>.</para>
+
+      <para revision="338405">The &man.pthread.get.name.np.3; function
+	has been added, which is used to retrieve the function name
+	associated with a thread.</para>
+
+      <para revision="338707">The &man.pthread.3; library has been
+	updated to improve <acronym>POSIX</acronym> compliance.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="kernel">
+    <title>Kernel</title>
+
+    <para>This section covers changes to kernel configurations, system
+      tuning, and system control parameters that are not otherwise
+      categorized.</para>
+
+    <sect2 xml:id="kernel-general">
+      <title>General Kernel Changes</title>
+
+      <para revision="339857" contrib="sponsor"
+	sponsor="&panzura;">The &man.ddb.4; debugging utility has been
+	updated to print command-line arguments to a process.</para>
+
+      <para revision="342656">The number of <acronym>MSI</acronym>
+	<acronym>IRQ</acronym>s have been converted from a constant to
+	a tunable.  The default remains at <literal>512</literal>,
+	which can now be changed during boot with the
+	<literal>machdep.num_msi_irqs</literal> &man.sysctl.8;.</para>
+
+      <para revision="343084" contrib="sponsor"
+	sponsor="&modirum;">The kernel will now log the &man.jail.8;
+	<acronym>ID</acronym> when logging a process exit.  The
+	&man.jail.8; <acronym>ID</acronym> <literal>0</literal>
+	represents processes that are not jailed.</para>
+
+      <para revision="348753">Warnings for features deprecated in
+	future releases will now be printed on all &os;
+	versions.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="drivers">
+    <title>Devices and Drivers</title>
+
+    <para>This section covers changes and additions to devices and
+      device drivers since &release.prev;.</para>
+
+    <sect2 xml:id="drivers-device">
+      <title>Device Drivers</title>
+
+      <para revision="340182" contrib="sponsor"
+	sponsor="&panzura;">The &man.ichwd.4; driver has been updated
+	to include support for <acronym>TCO</acronym> watchdog timers
+	in the Lewisburg <acronym>PCH</acronym> (C620) chipset.</para>
+
+      <para revision="345981">The &man.random.4; driver has been
+	updated to improve performance during expensive
+	reseeding.</para>
+
+      <para revision="347962">The <literal>ae(4)</literal>,
+	<literal>bm(4)</literal>, <literal>cs(4)</literal>,
+	<literal>de(4)</literal>, <literal>dme(4)</literal>,
+	<literal>ed(4)</literal>, <literal>ep(4)</literal>,
+	<literal>ex(4)</literal>, <literal>fe(4)</literal>,
+	<literal>pcn(4)</literal>, <literal>sf(4)</literal>,
+	<literal>sn(4)</literal>, <literal>tl(4)</literal>,
+	<literal>tx(4)</literal>, <literal>txp(4)</literal>,
+	<literal>vx(4)</literal>, <literal>wb(4)</literal>, and
+	<literal>xe(4)</literal> drivers have been marked as
+	deprecated, and are not present in &os;&nbsp;13.0.</para>
+    </sect2>
+
+    <sect2 xml:id="drivers-network">
+      <title>Network Drivers</title>
+
+      <para revision="338938">The &man.oce.4; driver has been updated
+	to version 11.0.50.0.</para>
+
+      <para revision="340369">The TP-Link&reg; TL-WN321G&trade;
+	network adapter now uses the &man.run.4; driver instead of the
+	&man.rum.4; driver.</para>
+
+      <para revision="341987" contrib="sponsor"
+	sponsor="&mellanox;">The &man.mlx4en.4; and &man.mlx5en.4;
+	drivers have been updated to version 3.5.0.</para>
+
+      <para revision="342206" contrib="sponsor" sponsor="&ix;">The
+	&man.lagg.4; driver has been updated to allow changing the
+	<acronym>MTU</acronym> without requiring destroying and
+	recreating the interface.</para>
+
+      <para revision="345040" contrib="sponsor"
+	sponsor="&chelsio;">The &man.ccr.4; driver has been added,
+	providing support for Chelsio&reg; T6&trade; cryptography
+	accelerators.</para>
+
+      <para revision="346855" contrib="sponsor"
+	sponsor="&chelsio;">The &man.cxgbe.4; driver has been updated
+	to include support for hash filters, <acronym>NAT</acronym>
+	offloading, and
+	<acronym>SMAC</acronym>/<acronym>DMAC</acronym> swapping
+	filters.</para>
+
+      <para revision="346940" contrib="sponsor"
+	sponsor="&chelsio;">The &man.cxgbe.4; T4, T5, and T6 firmware
+	has been updated to version 1.23.0.0.</para>
+
+      <para revision="349181" contrib="sponsor"
+	sponsor="&intelcorp;">The &man.ixl.4; driver has been updated
+	version 1.11.9.</para>
+
+      <para revision="349181" contrib="sponsor"
+	sponsor="&intelcorp;">The &man.ixlv.4; driver has been updated
+	version 1.5.8.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="hardware">
+    <title>Hardware Support</title>
+
+    <para>This section covers general hardware support for physical
+      machines, hypervisors, and virtualization environments, as well
+      as hardware changes and updates that do not otherwise fit in
+      other sections of this document.</para>
+
+    <sect2 xml:id="hardware-support">
+      <title>Hardware Support</title>
+
+      <para revision="342254">The &man.vt.4; keyboard mapping has been
+	updated to include <literal>uk.macbook.kbd</literal>
+	support.</para>
+    </sect2>
+
+    <sect2 xml:id="hardware-virtualization">
+      <title>Virtualization Support</title>
+
+      <para revision="341758" contrib="sponsor" sponsor="&ix;">Support
+	for <acronym>PS/2</acronym> scan codes for
+	<literal>NumLock</literal>, <literal>ScrollLock</literal>, and
+	numerical keypad keys has been added to &man.bhyve.8;.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="storage">
+    <title>Storage</title>
+
+    <para>This section covers changes and additions to file systems
+      and other storage subsystems, both local and networked.</para>
+
+    <sect2 xml:id="storage-general">
+      <title>General Storage</title>
+
+      <para revision="348588">Deprecation warnings have been added for
+	weaker algorithms when creating &man.geli.8; providers.</para>
+    </sect2>
+
+    <sect2 xml:id="storage-zfs">
+      <title>ZFS</title>
+
+      <para revision="341828" contrib="sponsor" sponsor="&klara;">An
+	issue that could result in a system hang during
+	<acronym>ZFS</acronym> vnode reclamation has been
+	fixed.</para>
+
+      <para revision="346690" contrib="sponsor" sponsor="&gandi;">The
+	<acronym>ZFS</acronym> filesystem has been updated to
+	implement parallel mounting.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="boot">
+    <title>Boot Loader Changes</title>
+
+    <para>This section covers the boot loader, boot menu, and other
+      boot-related changes.</para>
+
+    <sect2 xml:id="boot-loader">
+      <title>Boot Loader Changes</title>
+
+      <para revision="344399">The functionality provided by
+	<filename>zfsloader</filename> has been added to
+	&man.loader.8;.  Once the system boot blocks have been updated
+	following <filename>UPDATING</filename>,
+	<filename>zfsloader</filename> is no longer needed.  A hard
+	link to &man.loader.8; has been added to ease in the
+	transition.</para>
+
+      <para revision="344399">The &man.loader.8; has been updated to
+	extend &man.geli.8; support to all architectures.</para>
+
+      <para revision="344403">The <acronym>UEFI</acronym> boot
+	&man.loader.8; has been updated to better determine the system
+	console type and device if not defined in
+	&man.loader.conf.5;.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="network">
+    <title>Networking</title>
+
+    <para>This section describes changes that affect networking in
+      &os;.</para>
+
+    <sect2 xml:id="network-general">
+      <title>General Network Changes</title>
+
+      <para revision="337461">The &man.ipfw.8; firewall has been
+	updated to include new rule options,
+	<literal>record-state</literal>, <literal>set-limit</literal>,
+	and <literal>defer-action</literal>.</para>
+
+      <para revision="346212" contrib="sponsor"
+	sponsor="&yandex;">Support for <acronym>NAT64</acronym>
+	<acronym>CLAT</acronym> has been added, as defined in
+	<acronym>RFC</acronym>6877.</para>
+
+      <para revision="348482">Warnings have been added for
+	<acronym>IPSec</acronym> algorithms deprecated in
+	<acronym>RFC</acronym> 8221.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="ports">
+    <title>Ports Collection and Package Infrastructure</title>
+
+    <para>This section covers changes to the &os;&nbsp;Ports
+      Collection, package infrastructure, and package maintenance and
+      installation tools.</para>
+
+    <sect2 xml:id="ports-packages ">
+      <title>Packaging Changes</title>
+
+      <para>The &man.pkg.8; utility has been updated to version
+	1.10.5.</para>
+
+      <para>The <application>KDE</application> desktop environment has
+	been updated to version 5.15.3.</para>
+
+      <para>The <application>GNOME</application> desktop environment
+	has been updated to version 3.28.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="releng">
+    <title>Release Engineering and Integration</title>
+
+    <para>This section convers changes that are specific to the
+      &os;&nbsp;Release Engineering processes.</para>
+
+    <sect2 xml:id="releng-changes">
+      <title>Integration Changes</title>
+
+      <para revision="347037" contrib="sponsor" sponsor="&ff;">The
+	default size of virtual machine disk images has been reduced
+	from 30GB to 3GB.  The <literal>raw</literal> disk images may
+	be resized with &man.truncate.1;, after which the
+	<filename>growfs</filename> &man.rc.8; script will resize the
+	filesystem within the virtual machine.  Other disk image
+	formats should be resized with the appropriate tool provided
+	by the hypervisor being used.</para>
+    </sect2>
+  </sect1>
+</article>
